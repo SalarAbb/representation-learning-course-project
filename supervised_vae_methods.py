@@ -207,7 +207,7 @@ class sdvae_model(object):
         self.loss_supervised = self.compute_loss_classification(self.y_hat_supervised,self.label)
         #self.loss_adversarial = self.compute_loss_classification(self.y_hat_adversarial,self.label)   
         # Loss with encoding capacity term
-        return self.recons_loss + self.beta * self.latent_loss + self.mu * (self.loss_supervised - self.loss_adversarial)
+        return self.recons_loss + self.gamma * tf.abs(self.latent_loss-self.c) + self.mu * (self.loss_supervised)
     
     def compute_loss_classification(self,network_output,label):
        # label is class labels for samples: [batch_size,label]
