@@ -1,4 +1,4 @@
-# the script to run the supervised vae on a dataset
+# the script to run the supervised vae on a dataset with images (dsprites)
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -52,9 +52,11 @@ elif options['train_restore'] is 'restore':
     model_factors_mu_test[:,0] = model_factors_mu_test[:,0] 
     gvaemodel.plot_images_from_latent(sup_train_images[0:20,:,:],model_factors_mu_test[0:20,:])
     gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[6,:,:])
+
     a = 1
     #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[9,:,:],sup_train_images[17,:,:])
     #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[394,:,:],sup_train_images[52,:,:])
     #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[208,:,:],sup_train_images[203,:,:])
     #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[342,:,:],sup_train_images[354,:,:])
     #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[340,:,:],sup_train_images[314,:,:])
+    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[84,:,:])
