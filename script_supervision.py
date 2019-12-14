@@ -6,7 +6,7 @@ import os
 import sys
 import numpy as np
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-from supervised_vae_methods import supervised_vae_model
+from supervised_vae_methods import sdvae_model
 from dataset_methods import data_set_model,dataset_dsprites
 
 # get the data from text dataset
@@ -35,11 +35,11 @@ options['save_global_directory'] = 'D:/Codes-Main-Python/cs699/Project/results'
 options['index_latent_supervised'] = np.arange(1) # this specifies the index in latent factors to be correlated with supervised target
 
 capacity_schedule = np.concatenate( ( np.zeros((10))  ,  np.linspace(0,25,options['num_epochs'] - 20) , 25 * np.ones((10)) )  )
-gvaemodel = supervised_gammavae_model(data_set = dataset_to_train, gamma = 5, capacity_schedule = capacity_schedule,mu = 50, options = options)
+sdvaemodel = sdvae_model(data_set = dataset_to_train, gamma = 5, capacity_schedule = capacity_schedule,mu = 50, options = options)
 
 if options['train_restore'] is 'train':
-    gvaemodel.build_computation_graph()
-    gvaemodel.train_model()
+    sdvaemodel.build_computation_graph()
+    sdvaemodel.train_model()
 elif options['train_restore'] is 'restore':
-    gvaemodel.load_model(epoch_num = 400)
+    sdvaemodel.load_model(epoch_num = 400)
     

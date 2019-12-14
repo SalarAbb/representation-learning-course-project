@@ -6,7 +6,7 @@ import os
 import sys
 import numpy as np
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-from supervised_vae_methods_images import supervised_gammavae_model
+from supervised_vae_methods_images import sdvae_model
 from dataset_methods import data_set_model,dataset_dsprites
 
 # get the data from text dataset
@@ -38,25 +38,25 @@ options['dropout_rate'] = 0.3
 options['save_global_directory'] = 'D:/Codes-Main-Python/cs699/Project/results_supervised_{}'.format(options_dataset['supervise_what'])
 options['index_latent_supervised'] = np.arange(1) # this specifies the index in latent factors to be correlated with supervised target
 capacity_schedule = np.concatenate( ( np.zeros((10))  ,  np.linspace(0,25,options['num_epochs'] - 20) , 25 * np.ones((10)) )  )
-gvaemodel = supervised_gammavae_model(data_set = dataset_to_train, gamma = 5, capacity_schedule = capacity_schedule,mu = 50, options = options)
+sdavemodel = sdvae_model(data_set = dataset_to_train, gamma = 5, capacity_schedule = capacity_schedule,mu = 50, options = options)
 if options['train_restore'] is 'train':
-    gvaemodel.build_computation_graph()
-    gvaemodel.train_model()
+    sdavemodel.build_computation_graph()
+    sdavemodel.train_model()
 elif options['train_restore'] is 'restore':
-    gvaemodel.load_model(epoch_num = 300)
+    sdavemodel.load_model(epoch_num = 300)
     sup_train_classes = dataset_to_train.y_train[:100]
     sup_train_images = dataset_to_train.x_train[:100,:,:]
     
-    model_factors_mu, model_factors_log_sigma2 = gvaemodel.project_to_latent(sup_train_images)
+    model_factors_mu, model_factors_log_sigma2 = sdavemodel.project_to_latent(sup_train_images)
     model_factors_mu_test = np.copy(model_factors_mu)
     model_factors_mu_test[:,0] = model_factors_mu_test[:,0] 
-    gvaemodel.plot_images_from_latent(sup_train_images[0:20,:,:],model_factors_mu_test[0:20,:])
-    gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[6,:,:])
+    sdavemodel.plot_images_from_latent(sup_train_images[0:20,:,:],model_factors_mu_test[0:20,:])
+    sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[6,:,:])
 
     a = 1
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[9,:,:],sup_train_images[17,:,:])
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[394,:,:],sup_train_images[52,:,:])
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[208,:,:],sup_train_images[203,:,:])
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[342,:,:],sup_train_images[354,:,:])
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[340,:,:],sup_train_images[314,:,:])
-    #gvaemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[84,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[9,:,:],sup_train_images[17,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[394,:,:],sup_train_images[52,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[208,:,:],sup_train_images[203,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[342,:,:],sup_train_images[354,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[340,:,:],sup_train_images[314,:,:])
+    #sdavemodel.render_images_by_mixing_latent_factors(sup_train_images[7,:,:],sup_train_images[84,:,:])
