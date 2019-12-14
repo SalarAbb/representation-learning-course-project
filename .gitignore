@@ -9,11 +9,15 @@ __pycache__/
 data/
 # models_Saved
 models_saved/
+results/
+figs/
+New folder/
 # tests and HW
 tests/
-#*.npz
-#*.pdf
+*.npz
+*.pdf
 *.zip
+*.ai
 # Distribution / packaging
 .Python
 build/
