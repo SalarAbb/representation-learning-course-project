@@ -77,22 +77,16 @@ class sdvae_model(object):
 
         net = recog_input
 
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
 
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
 
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
 
         mu = tf.layers.dense(net,self.dim_latent, kernel_initializer = initilizer_dense)
-        # we need to design mu more intelligently, mu sometimes does get loop coordinates, therefore we should take that into account
-        # therefore we force all latent variabales to be around 
-        mu_0 = tf.expand_dims( tf.acos(mu[:,0]) , 1)
-        mu_1 = tf.expand_dims( mu[:,1] , 1)
-
-        mu = tf.concat( [mu_0,mu_1] , axis = 1 )
 
         # sigma2  = tf.layers.dense(net,self.dim_latent, kernel_initializer = initilizer_dense)
         # sigma2 = tf.math.square(sigma2)
@@ -111,13 +105,13 @@ class sdvae_model(object):
         net = latent_sample
 
 
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
     
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
 
-        net = tf.layers.dense(net,20, kernel_initializer = initilizer_dense)
+        net = tf.layers.dense(net,60, kernel_initializer = initilizer_dense)
         net = tf.nn.relu(net)
 
         net = tf.layers.dense(net,self.dim_x, kernel_initializer = initilizer_dense)
@@ -275,8 +269,8 @@ class sdvae_model(object):
                 batch_x_test = self.x_test
                 batch_y_test = self.y_test
                 # run gradient descent
-                loss_this, recons_loss_this, latent_loss_this = self.sess.run([self.loss_train,self.recons_loss,self.latent_loss], feed_dict = {self.x: batch_x_test, self.y:batch_y_test, self.is_training: False, self.c: c_this})
-                print('TEST: epoch {}--> loss_tot = {}, loss_rec = {}, loss_lat = {}'.format(epoch,loss_this, recons_loss_this, latent_loss_this))
+                loss_this, recons_loss_this, latent_loss_this, loss_supervised_this = self.sess.run([self.loss_train,self.recons_loss,self.latent_loss,self.loss_supervised], feed_dict = {self.x: batch_x_test, self.y:batch_y_test, self.is_training: False, self.c: c_this})
+                print('TEST: epoch {}--> loss_tot = {}, loss_rec = {}, loss_lat = {}, loss_sup = {}'.format(epoch,loss_this, recons_loss_this, latent_loss_this, loss_supervised_this))
                 self.loss_tot_test.append(loss_this)
                 self.loss_recons_test.append(recons_loss_this)
                 self.loss_latent_test.append(latent_loss_this)

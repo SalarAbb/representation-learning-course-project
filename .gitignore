@@ -12,8 +12,11 @@ models_saved/
 results/
 figs/
 New folder/
+text_data/
 # tests and HW
 tests/
+*.npz
+*.npy
 *.npz
 *.pdf
 *.zip

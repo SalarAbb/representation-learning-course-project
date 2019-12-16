@@ -4,12 +4,57 @@ import matplotlib.pyplot as plt
 import sys
 import os
 from scipy import stats, io
+import csv
+
+
+class data_set_text(object):
+    
+    def __init__(self,options):
+        self.label_path = options['label_path']
+        self.rep_path = options['rep_path']
+
+    def load_dataset(self):    
+        # read labels
+        with open(self.label_path) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
+            gender_list = []
+            for row in csv_reader:
+                if line_count != 0:
+                    gender_list.append(row[0])
+                line_count += 1
+                if line_count % 10000 == 0:
+                    print('{}'.format(line_count/10000))
+            print(f'Processed {line_count} lines.')
+        gender_vec = [self._transform_gender_to_digit(x) for x in gender_list]
+        gender_vec = np.asarray(gender_vec)    
+        # read bert re[]
+        data =  np.load(self.rep_path) 
+        # index_train
+        index_train = np.arange(50000)
+        index_test = np.arange(60000)
+        index_test = np.delete(index_test,index_train)
+        #
+        which_data_index = np.arange(40)
+        self.y_train = gender_vec[index_train]
+        self.x_train = data[index_train,:]
+        self.x_train = self.x_train[:,which_data_index]
+        self.y_test = gender_vec[index_test]
+        self.x_test = data[index_test,:]
+        self.x_test = self.x_test[:,which_data_index]
+        self.dim_y = 1
+        self.dim_x = np.shape(self.x_train)[1]
+    def _transform_gender_to_digit(self,gender):
+        if gender == 'Male':
+            return 0
+        elif gender == 'Female':
+            return 1
+
 
 class data_set_model(object):
-    # this class creates the RNN model for movement generation
+
     
     def __init__(self,x_train,x_test,y_train,y_test,options):
-        # options: options of loading the RNN model
         #  x and y are always time * dim
         self.x_train = x_train
         self.x_test = x_test
